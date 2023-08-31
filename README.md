@@ -7,14 +7,14 @@ Our objective is to create a series of scripts which will allow us to conduct a 
 
 The objective is to collect and track data on the extent to which articles meet certain criteria, which can impact their display and user engagement. These criteria include:
 
-- length of article title is less than 100 characters (important because longer titles may get cut off in certain display formats)
+- length of article title is less than 120 characters (important because longer titles may get cut off in certain display formats)
 - length of article content is greater than 3,000 and less than 15,000 characters
 - article includes brief author bio
-- whether or not an article category was detected by in-house algorithms (important for searches within the Camelot portal)
-- whether or not a reader rating is displayed (depends on the display format)
-- whether or not the article is prominently featured
-- technical format (important because some article formats are less suited for mobile devices)
-- whether or not the article has any duplicates published at the same time (can happen because multiple methods are used for collecting articles)
+- article category was detected by in-house algorithms (important for searches within the Camelot portal)
+- a reader rating is displayed (depends on the display format)
+- article is prominently featured
+- technical format is mobile friendly (important because some article formats are less suited for small screens)
+- article has duplicates published at the same time (can happen because multiple methods are used for collecting articles)
 
 The objective is to determine the number of postings which meet the above criteria on a weekly / monthly basis and loading the corresponding data into tables which can be used for a Tableau Dashboard. Furthermore, a "Score" is to be created which indicates the extent to which an article fulfills the above criteria. 
 
