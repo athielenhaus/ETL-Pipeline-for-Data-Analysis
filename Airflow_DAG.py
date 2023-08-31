@@ -72,11 +72,11 @@ dag = DAG(
     catchup=False
 )
 
-
-task_1 = ExasolOperator(
-    task_id='Check_for_detected_article_categories.sql',
+file_1a = '00_Check_for_detected_article_categories.sql'
+task_1a = ExasolOperator(
+    task_id= file_1a,
     jdbc_conn_id='camelot_analytics_dept',
-    sqlfile=path + '00_Check_for_detected_article_categories.sql',
+    sqlfile=path + file_1a,
     parameters={
         'week_or_month': week_or_month,
         'start_date': start_date,
@@ -87,10 +87,11 @@ task_1 = ExasolOperator(
 
 #To-Do: check for successful article category check
 
-task_2 = ExasolOperator(
-    task_id='Check_for_duplicates.sql',
+file_1b = '00_Check_for_duplicates_autom.sql'
+task_1b = ExasolOperator(
+    task_id= file_1b,
     jdbc_conn_id='camelot_analytics_dept',
-    sqlfile=path + '00_Check_for_duplicates_autom.sql',
+    sqlfile=path + file_1b,
     parameters={
         'week_or_month': week_or_month,
         'start_date': start_date,
@@ -102,23 +103,37 @@ task_2 = ExasolOperator(
 
 #To-Do: check for succesful duplicate check
 
-task_3 = ExasolOperator(
-    task_id='AC_Analysis.sql',
+file_2 = '01_AC_Analysis_autom.sql'
+task_2 = ExasolOperator(
+    task_id= file_2,
     jdbc_conn_id='camelot_analytics_dept',
-    sqlfile=path + '01_AC_Analysis_autom.sql',
+    sqlfile=path + file_2,
     parameters={
         'week_or_month': week_or_month,
         'start_date': start_date,
         'end_date': end_date
     },
     dag=dag
-)                             
-     
-                 
-task_4 = ExasolOperator(
-    task_id='Calculate_AC_Scores.sql',
+)                    
+
+file_3 = '02_Aggregate_results_for_individual_criteria.sql'
+task_3 = ExasolOperator(
+    task_id = file_3,
     jdbc_conn_id='camelot_analytics_dept',
-    sqlfile=path + '03_calculate_AC_scores.sql',
+    sqlfile=path + file_3,
+    parameters={
+        'week_or_month': week_or_month,
+        'start_date': start_date,
+        'end_date': end_date
+    },
+    dag=dag
+)         
+     
+file_4 = '03_calculate_AC_scores.sql'               
+task_4 = ExasolOperator(
+    task_id= file_4,
+    jdbc_conn_id='camelot_analytics_dept',
+    sqlfile=path + file_4,
     parameters={
         'week_or_month': week_or_month
     },
@@ -138,7 +153,7 @@ sendEmail = EmailOperator(
     
 
 # Establish Workflow
-task_1 >> task_2 >> task_3 >> task_4 >> sendEmail 
+[task_1a, task_1b] >> task_2 >> task_3 >> task_4 >> sendEmail 
 
 
 
