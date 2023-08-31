@@ -1,4 +1,4 @@
-# Analytics Data Pipeline for News Aggregator
+# Analytics Data Pipeline for News Aggregator with SQL + Airflow
 
 ### Scenario
 Our objective is to create a series of scripts which will allow us to conduct a weekly and monthly analysis of online articles for a (fictional) online news aggregator and entertainment website called Camelot. In this scenario, Camelot collects articles from paying customers (in return for "premium" promotion on the Camelot news portal) as well as from other sources.
