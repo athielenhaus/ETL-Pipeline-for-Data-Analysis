@@ -8,7 +8,7 @@ Our objective is to create a series of scripts which will allow us to conduct a 
 The objective is to collect and track data on the extent to which articles meet certain criteria, which can impact their display and user engagement. These criteria include:
 
 - length of article title is less than 100 characters (important because longer titles may get cut off in certain display formats)
-- length of article content is greater than 2,000 and less than 20,000 characters
+- length of article content is greater than 3,000 and less than 15,000 characters
 - article includes brief author bio
 - whether or not an article category was detected by in-house algorithms (important for searches within the Camelot portal)
 - whether or not a reader rating is displayed (depends on the display format)
