@@ -77,7 +77,7 @@ CREATE OR REPLACE TABLE ANALYTICS_DB.AC_ANALYSIS_PREP_TABLE_{week_or_month!i}LY 
             BETWEEN 3000 AND 15000 THEN 1 ELSE 0 ENDIF AS IS_REASONABLE_LENGTH,
 
         -- Check that article title does not exceed maximum length for flexible display (100 char)
-        IF A.TITLE IS NOT NULL AND LENGTH (A.TITLE) <= 100 THEN 1 ELSE 0 ENDIF AS IS_DISPLAY_FRIENDLY_TITLE,
+        IF A.TITLE IS NOT NULL AND LENGTH (A.TITLE) <= 120 THEN 1 ELSE 0 ENDIF AS IS_DISPLAY_FRIENDLY_TITLE,
 
         -- Check for mobile-friendly format
         IF A.IS_GFRAME = 0 THEN 1 ELSE 0 ENDIF AS IS_MOBILE_FRIENDLY,
