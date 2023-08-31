@@ -1,8 +1,6 @@
-/* ARTICLE QUALITY ANALYSIS - SCRIPT FOR AUTOMATION
+/* ARTICLE COMPLETENESS ANALYSIS - SCRIPT FOR AUTOMATION
 -- THE AC Analysis takes into the consideration the LAST VISIBLE STATUS of each article within the given time period.
 */
-
-
 
 /* First we get all the distinct article IDs of visible articles in the given period, as well as the last day in the given
 period that the article was visible, from the table VISIBLE_ARTICLES_DAILY. */
@@ -28,7 +26,6 @@ CREATE OR REPLACE TABLE ANALYTICS_DB.ARTICLES_LAST_VISIBLE_DAYS_{week_or_month!i
 
     ORDER BY 1, 2
 ;
-
 
 
 /*We check the ARTICLES_T table to get the timestamp which corresponds to the last visible status, based on the last visible day
