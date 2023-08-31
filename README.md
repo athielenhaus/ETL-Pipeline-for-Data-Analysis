@@ -1,4 +1,4 @@
-# Analytics Data Pipeline for News Aggregator with SQL + Airflow
+# ETL Pipeline for News Aggregator with SQL + Python Airflow
 
 ### Scenario
 Our objective is to create a series of scripts which will allow us to conduct a weekly and monthly analysis of online articles for a (fictional) online news aggregator and entertainment website called Camelot. In this scenario, Camelot collects articles from paying customers (in return for "premium" promotion on the Camelot news portal) as well as from other sources.
@@ -22,7 +22,7 @@ The objective is to determine the number of postings which meet the above criter
 
 ![DAG Chart](./DAG.png)
 
-To get the data several SQL scripts were created, which can be run sequentially using Airflow. The first two scripts (beginning with 00) can be run in parallel or in random order. The subsequent scripts must be run in order. The same SQL scripts are used for both the weekly and monthly analysis. The related variables would be passed into the script by a Python script. The weekly script would run every Monday and the monthly script every first day of the month.
+To collect and aggregate the data, several SQL scripts were created, which can be run sequentially using the Python DAG.py script which contains an Airflow DAG. The first two SQL scripts (beginning with 00) can be run in parallel or in random order. The subsequent scripts must be run in order. The same SQL scripts are used for both the weekly and monthly analysis. The related variables would be passed into the script by a Python script. The weekly script would run every Monday and the monthly script every first day of the month.
 
 Scripts overview:
 - 00 Check ontology tables to determine, for each article, whether article category was detected  
