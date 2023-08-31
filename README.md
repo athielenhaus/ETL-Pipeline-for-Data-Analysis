@@ -1,7 +1,9 @@
 # ETL Pipeline for News Aggregator with SQL + Python Airflow
 
 ### Scenario
-Our objective is to create a series of scripts which will allow us to conduct a weekly and monthly analysis of online articles for a (fictional) online news aggregator and entertainment website called Camelot. In this scenario, Camelot collects articles from paying customers (in return for "premium" promotion on the Camelot news portal) as well as from other sources.
+Our objective is to create a series of scripts which will allow us to conduct a weekly and monthly analysis of online articles for a (fictional) online news aggregator and entertainment website called Camelot. 
+
+Camelot collects articles from paying customers in return for "premium" promotion on the Camelot news portal, as well as from other sources.
 
 ### Article Completeness Criteria:
 
@@ -16,13 +18,13 @@ The objective is to collect and track data on the extent to which articles meet 
 - technical format is mobile friendly (important because some article formats are less suited for small screens)
 - article has duplicates published at the same time (can happen because multiple methods are used for collecting articles)
 
-The objective is to determine the number of postings which meet the above criteria on a weekly / monthly basis and loading the corresponding data into tables which can be used for a Tableau Dashboard. Furthermore, a "Score" is to be created which indicates the extent to which an article fulfills the above criteria. 
+The objective is to determine the number of postings which meet the above criteria on a weekly / monthly basis, and to load the corresponding data into tables which can be used for a Tableau Dashboard. Furthermore, a "Article Completeness Score" is to be created which indicates the extent to which an article fulfills the above criteria. 
 
 ### Overview of solution: 
 
 ![DAG Chart](./DAG.png)
 
-To collect and aggregate the data, several SQL scripts were created, which can be run sequentially using the Python DAG.py script which contains an Airflow DAG. The first two SQL scripts (beginning with 00) can be run in parallel or in random order. The subsequent scripts must be run in order. The same SQL scripts are used for both the weekly and monthly analysis. The related variables would be passed into the script by a Python script. The weekly script would run every Monday and the monthly script every first day of the month.
+To collect and aggregate the data, several SQL scripts were created, which can be run sequentially using the DAG.py script which contains an Airflow DAG. The first two SQL scripts (beginning with 00) are run in parallel, the subsequent scripts must be run in order. The same SQL scripts are used for both the weekly and monthly analysis. The related variables related to "weekly" and "monthly" analysis are passed into the scripts by the DAG.py script. The weekly script runs every Monday and the monthly script every first day of the month, at noon, after other upstream scripts have been run.
 
 Scripts overview:
 - 00 Check tables to determine, for each article, whether article category was detected  
@@ -39,7 +41,9 @@ Possible next steps could include:
 - ML Model creation to determine feature importance: an ML model could be created to predict article engagement (views, clicks, shares, etc.) based on the indicated criteria. This could involve:
   - creating a regression model and calculating adjusted r2, to determine the amount of variance which can be explained by the features
   - conducting a feature importance analysis, utilizing for example permutation feature importance and partial dependence plots, to determine the features that have the most significant impact
-- DAG Optimization: in case it is decided to run the pipeline for an extended time period (for example longer than 2 months) it could be worthwhile to integrate automatic data article completeness checks in the Airflow DAG
+- DAG Optimization:
+  - in case it is decided to run the DAG for an extended time period (for example longer than 2 months), it could be worthwhile to integrate automatic data article completeness checks
+  - it could be worthwhile to integrate external event sensors to detect successful completion of upstream DAGs. 
 
 
 
