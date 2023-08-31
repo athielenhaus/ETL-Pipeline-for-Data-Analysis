@@ -20,6 +20,8 @@ The objective is to determine the number of postings which meet the above criter
 
 ### Overview of solution: 
 
+![DAG Chart](./DAG.png)
+
 To get the data several SQL scripts were created, which can be run sequentially using Airflow. The first two scripts (beginning with 00) can be run in parallel or in random order. The subsequent scripts must be run in order. The same SQL scripts are used for both the weekly and monthly analysis. The related variables would be passed into the script by a Python script. The weekly script would run every Monday and the monthly script every first day of the month.
 
 Scripts overview:
