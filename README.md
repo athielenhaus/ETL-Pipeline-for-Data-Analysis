@@ -41,9 +41,10 @@ Possible next steps could include:
 - ML Model creation to determine feature importance: an ML model could be created to predict article engagement (views, clicks, shares, etc.) based on the indicated criteria. This could involve:
   - creating a regression model and calculating adjusted r2, to determine the amount of variance which can be explained by the features
   - conducting a feature importance analysis, utilizing for example permutation feature importance and partial dependence plots, to determine the features that have the most significant impact
-- DAG Optimization:
-  - in case it is decided to run the DAG for an extended time period (for example longer than 2 months), it could be worthwhile to integrate automatic data article completeness checks
-  - it could be worthwhile to integrate external event sensors to detect successful completion of upstream DAGs. 
+- DAG Optimization: in case it is decided to run the DAG for an extended time period (for example longer than 2 months), it could be worthwhile to
+  - integrate some basic QA checks  which help indicate to what extent the processes have run successfully (for example: check that the table has a minimum length of 100,000 rows)
+  - integrate external event sensors to detect successful completion of upstream DAGs (one less thing to worry about).
+  - discuss with Data Engineering Dept. or owners of upstream DAGs possible / emerging data quality issues. 
 
 
 
