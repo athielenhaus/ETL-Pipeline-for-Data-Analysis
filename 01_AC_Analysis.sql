@@ -1,4 +1,4 @@
-/* ARTICLE COMPLETENESS ANALYSIS - SCRIPT FOR AUTOMATION
+/* ARTICLE COMPLETENESS ANALYSIS
 -- THE AC Analysis takes into the consideration the LAST VISIBLE STATUS of each article within the given time period.
 */
 
@@ -63,6 +63,8 @@ CREATE OR REPLACE TABLE ANALYTICS_DB.AC_ANALYSIS_PREP_TABLE_{week_or_month!i}LY 
         D.{week_or_month!i}_ID                  AS PERIOD_ID,
         A.AUTHOR_ID,
         A.AUTHOR_NAME || A.TITLE                AS DUP_CHECK,
+
+        -- Article source is not explicitly required for current analysis but can be useful at some point
         Case
             WHEN A."SOURCE" IS NULL THEN 'unknown'
             WHEN A."SOURCE" = 'PC' THEN 'Premium Customer'
@@ -88,7 +90,7 @@ CREATE OR REPLACE TABLE ANALYTICS_DB.AC_ANALYSIS_PREP_TABLE_{week_or_month!i}LY 
     FROM ARTICLES_DB.ARTICLES_T A
 
     -- Join with previous table
-    INNER JOIN ANALYTICS_DB.RECENT_ARTICLES_WITH_TYPE T
+    INNER JOIN ANALYTICS_DB.ARTICLES_TYPE T
     ON A.ID = T.ARTICLE_ID
 
     -- Join to only get those rows containing the last article status for the given period

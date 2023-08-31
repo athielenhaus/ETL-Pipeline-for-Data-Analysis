@@ -23,7 +23,7 @@ The objective is to determine the number of postings which meet the above criter
 To get the data several SQL scripts were created, which can be run sequentially using Airflow. The first two scripts (beginning with 00) can be run in parallel or in random order. The subsequent scripts must be run in order. The same SQL scripts are used for both the weekly and monthly analysis. The related variables would be passed into the script by a Python script. The weekly script would run every Monday and the monthly script every first day of the month.
 
 Scripts overview:
-- 00 Check ontology tables to determine, for each article, whether article category was detected  
+- 00 Check tables to determine, for each article, whether article category was detected  
 - 00 Check to see which articles have an identical author and article title (duplicate check)
 - 01 For each article visible during the given time period, check whether it meets each of the article completeness criteria
 - 02 Aggregate results according to categories (paid, not paid, all inventory) for each of the criteria. Our result is a table which indicates the percentage of articles in the given period which meeting each AC criterion.
