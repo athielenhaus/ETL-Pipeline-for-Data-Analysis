@@ -4,11 +4,7 @@
    -- Calculate the article completeness score for each article
    -- Calculate average (mean) and median AC scores for the given period
    -- Insert these values into a table which serves as source for Tableau Dashboard
-
-   DEPENDENCIES:
-   -- depends on AC Analysis script
  */
-
 
 -- CREATE AC SCORE - ADD UP THE POINTS FOR EACH ARTICLE AND WEEK
 CREATE OR REPLACE TABLE ANALYTICS_DB.ARTICLES_AC_SCORES_{week_or_month!i}LY AS
