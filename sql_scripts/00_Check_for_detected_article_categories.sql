@@ -18,7 +18,7 @@ CREATE OR REPLACE TABLE ANALYTICS_DB.ARTICLE_CATEGORY_DETECTED_BOOLEAN_{week_or_
                 AND to_date(V.DAY_DATE) <= {end_date}
             )
 
-    -- Need to select DISTINCT because ARTICLE_ID || ENTITY_TYPE can occur multiple times in each table
+    -- Need to select DISTINCT because ARTICLE_ID || ENTITY_TYPE can occur multiple times in each table (an article can be in multiple categories)
     SELECT DISTINCT
         A.ID,
 
@@ -27,6 +27,7 @@ CREATE OR REPLACE TABLE ANALYTICS_DB.ARTICLE_CATEGORY_DETECTED_BOOLEAN_{week_or_
 
     FROM distinct_articles_tbl A
 
+    -- Below we are left-joining because we want to check for all article IDs from distinct_articles_tbl
     -- Check for category detection from article title
     LEFT JOIN HIVE_DB_ENTITIZED.ARTICLES_TITLE T
     ON A.ID = T.ARTICLE_ID
