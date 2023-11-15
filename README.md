@@ -27,8 +27,8 @@ The objective is to determine the number of postings which meet the above criter
 To collect and aggregate the data, several SQL scripts were created, which can be run sequentially using the DAG.py script which contains an Airflow DAG. The first two SQL scripts (beginning with 00) are run in parallel, the subsequent scripts must be run in order. The same SQL scripts are used for both the weekly and monthly analysis. The related variables related to "weekly" and "monthly" analysis are passed into the scripts by the DAG.py script. The weekly script runs every Monday and the monthly script every first day of the month, at noon, after other upstream scripts have been run.
 
 Scripts overview:
-- 00 Check tables to determine, for each article, whether article category was detected  
-- 00 Check to see which articles have an identical author and article title (duplicate check)
+- 00 Check for detected article category: check tables to determine, for each article, whether article category was detected  
+- 00 Check for duplicates: see which articles have an identical author and article title
 - 01 For each article visible during the given time period, check whether it meets each of the article completeness criteria
 - 02 Aggregate results according to categories (paid, not paid, all inventory) for each of the criteria. Our result is a table which indicates the percentage of articles in the given period which meeting each AC criterion.
 - 03 Calculate Article Completeness score (AC score) for each posting and aggregate results according to categories (paid, not paid, all inventory). Our result is a table which indicates the mean and median AC score for the given period. 
