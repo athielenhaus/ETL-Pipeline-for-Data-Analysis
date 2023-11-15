@@ -23,7 +23,7 @@ CREATE OR REPLACE TABLE ANALYTICS_DB.ARTICLE_CATEGORY_DETECTED_BOOLEAN_{week_or_
         A.ID,
 
         -- If neither of the Hive tables contains an entry for the given article ID, no category detected
-        CASE WHEN T.ARTICLE_ID IS NULL AND G.ARTICLE_ID IS NULL THEN 0 ELSE 1 END AS ARTICLE_CATEGORY_DETECTED
+        CASE WHEN COALESCE(T.ARTICLE_ID, G.ARTICLE_ID) IS NULL THEN 0 ELSE 1 END AS ARTICLE_CATEGORY_DETECTED
 
     FROM distinct_articles_tbl A
 
