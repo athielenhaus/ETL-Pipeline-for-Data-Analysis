@@ -82,7 +82,7 @@ check_external_dag_completion = ExternalTaskSensor(
 
 
 file_1a = '00_Check_for_detected_article_categories.sql'
-task_1a = ExasolOperator(
+run_cat_det_check = ExasolOperator(
     task_id= file_1a,
     jdbc_conn_id='camelot_analytics_dept',
     sqlfile=path + file_1a,
@@ -94,19 +94,20 @@ task_1a = ExasolOperator(
     dag=dag
 )
 
-#check for successful article category check
+#check for successful article category check (row count)
+cat_table= f'ANALYTICS_DB.ARTICLE_CATEGORY_DETECTED_BOOLEAN_{week_or_month}LY'
 check_cat_tbl_length = PythonOperator(
     task_id='check_cat_tbl_length',
     python_callable=check_table_length,
     op_kwargs={
-        'table': f'ANALYTICS_DB.ARTICLE_CATEGORY_DETECTED_BOOLEAN_{week_or_month}LY',
-        'min_rows': 1000      # expected row count
+        'table': cat_table,
+        'min_rows': 100000      # expected row count
     },
     dag=dag,
 )
 
 file_1b = '00_Check_for_duplicates_autom.sql'
-task_1b = ExasolOperator(
+run_dup_check = ExasolOperator(
     task_id= file_1b,
     jdbc_conn_id='camelot_analytics_dept',
     sqlfile=path + file_1b,
@@ -119,19 +120,20 @@ task_1b = ExasolOperator(
 )
 
 
-#Check for successful duplicate check
+#Check for successful duplicate check (row count)
+dup_table = f'ANALYTICS_DB.AC_DUPLICATE_CHECK_{week_or_month}LY'
 check_dup_tbl_length = PythonOperator(
     task_id='check_dup_tbl_length',
     python_callable=check_table_length,
     op_kwargs={
-        'table': f'ANALYTICS_DB.AC_DUPLICATE_CHECK_{week_or_month}LY',
-        'min_rows': 1000      # expected row count
+        'table': dup_table,
+        'min_rows': 100000      # expected row count
     },
     dag=dag,
 )
 
-file_2 = '01_AC_Analysis_autom.sql'
-task_2 = ExasolOperator(
+file_2 = '01_AC_Analysis.sql'
+run_ac_analysis = ExasolOperator(
     task_id= file_2,
     jdbc_conn_id='camelot_analytics_dept',
     sqlfile=path + file_2,
@@ -141,10 +143,22 @@ task_2 = ExasolOperator(
         'end_date': end_date
     },
     dag=dag
-)                    
+) 
+
+#Check for successful AC Analysis (row count)
+ac_table = f'ANALYTICS_DB.AC_ANALYSIS_{week_or_month}LY'
+check_ac_tbl_length = PythonOperator(
+    task_id='check_ac_tbl_length',
+    python_callable=check_table_length,
+    op_kwargs={
+        'table': ac_table,
+        'min_rows': 100000      # expected row count
+    },
+    dag=dag,
+)
 
 file_3 = '02_Aggregate_results_for_individual_criteria.sql'
-task_3 = ExasolOperator(
+aggregate_results = ExasolOperator(
     task_id = file_3,
     jdbc_conn_id='camelot_analytics_dept',
     sqlfile=path + file_3,
@@ -157,7 +171,7 @@ task_3 = ExasolOperator(
 )         
      
 file_4 = '03_calculate_AC_scores.sql'               
-task_4 = ExasolOperator(
+calc_ac_scores = ExasolOperator(
     task_id= file_4,
     jdbc_conn_id='camelot_analytics_dept',
     sqlfile=path + file_4,
@@ -180,7 +194,7 @@ sendEmail = EmailOperator(
     
 
 # Establish Workflow
-check_external_dag_completion >> [task_1a, task_1b] >> [task_1a, task_1b] >> task_2 >> task_3 >> task_4 >> sendEmail 
+check_external_dag_completion >> [run_cat_det_check, run_dup_check] >> [check_cat_tbl_length, check_dup_tbl_length] >> run_ac_analysis >> check_ac_tbl_length >> aggregate_results >> calc_ac_scores >> sendEmail 
 
 
 
