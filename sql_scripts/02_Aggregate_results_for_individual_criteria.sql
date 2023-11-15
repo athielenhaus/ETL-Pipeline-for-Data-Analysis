@@ -52,7 +52,7 @@ INSERT INTO ANALYTICS_DB.AC_PERCENTAGES_{week_or_month!i}LY
 ;
 
 
---INSERT DATA -  PAID
+--INSERT DATA -  NOT PAID
 INSERT INTO ANALYTICS_DB.AC_PERCENTAGES_{week_or_month!i}LY
     SELECT
         'NOT PAID'                                          as INV_CATEGORY,

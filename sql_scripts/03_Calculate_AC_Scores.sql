@@ -61,7 +61,7 @@ INSERT INTO ANALYTICS_DB.AC_SCORE_AVERAGES_{week_or_month!i}LY
 ;
 
 
--- ADD VALUES FOR TOP PAID WEEKLY
+-- ADD VALUES FOR NOT PAID
 INSERT INTO ANALYTICS_DB.AC_SCORE_AVERAGES_{week_or_month!i}LY
     SELECT
         'NOT PAID'                                              as INV_CATEGORY,

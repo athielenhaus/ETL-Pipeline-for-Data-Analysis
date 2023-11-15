@@ -17,7 +17,7 @@ from operators.ExasolOperator import ExasolOperator             # custom-made op
 from airflow.operators.jdbc_operator import JdbcOperator
 from airflow.operators.email_operator import EmailOperator
 from airflow.operators.python_operator import PythonOperator
-#from airflow.sensors.external_task_sensor import ExternalTaskSensor 
+from airflow.sensors.external_task_sensor import ExternalTaskSensor 
 
 # utils:
 from airflow.hooks.base_hook import BaseHook   
@@ -25,9 +25,8 @@ import pendulum
 from datetime import datetime, timedelta       
 import sys
 
-# set path to import modules from other python file
-path = "/dags/airflow-dags.git/analytics_dept/python/"
-sys.path.insert(0, path)
+# import qa script from other file
+from qa import check_table_length
 
 # PROVIDE DEFAULT ARGUMENTS
 default_args = {
@@ -37,7 +36,7 @@ default_args = {
     "email": "arne.thielenhaus@gmail.com",          
     "email_on_failure": True,
     "email_on_retry": False,
-    "retries": 2,                                   # in case of failure, the number of retries
+    "retries": 1,                                   # in case of failure, the number of retries
     "retry_delay": timedelta(minutes=5)             # time to wait for each retry
 }   
 
@@ -72,6 +71,16 @@ dag = DAG(
     catchup=False
 )
 
+check_external_dag_completion = ExternalTaskSensor(
+    task_id='check_external_dag_completion',
+    external_dag_id='daily_articles_DB_update',
+    external_task_id= None, 
+    timeout=7200,  # Timeout in seconds (2 hours)
+    poke_interval=1200,  # Time in seconds that the job should wait in between each try during the poking (20 minutes)
+    mode='poke'  # Mode can be 'poke' or 'reschedule'
+)
+
+
 file_1a = '00_Check_for_detected_article_categories.sql'
 task_1a = ExasolOperator(
     task_id= file_1a,
@@ -85,7 +94,16 @@ task_1a = ExasolOperator(
     dag=dag
 )
 
-#To-Do: check for successful article category check
+#check for successful article category check
+check_cat_tbl_length = PythonOperator(
+    task_id='check_cat_tbl_length',
+    python_callable=check_table_length,
+    op_kwargs={
+        'table': f'ANALYTICS_DB.ARTICLE_CATEGORY_DETECTED_BOOLEAN_{week_or_month}LY',
+        'min_rows': 1000      # expected row count
+    },
+    dag=dag,
+)
 
 file_1b = '00_Check_for_duplicates_autom.sql'
 task_1b = ExasolOperator(
@@ -101,7 +119,16 @@ task_1b = ExasolOperator(
 )
 
 
-#To-Do: check for succesful duplicate check
+#Check for successful duplicate check
+check_dup_tbl_length = PythonOperator(
+    task_id='check_dup_tbl_length',
+    python_callable=check_table_length,
+    op_kwargs={
+        'table': f'ANALYTICS_DB.AC_DUPLICATE_CHECK_{week_or_month}LY',
+        'min_rows': 1000      # expected row count
+    },
+    dag=dag,
+)
 
 file_2 = '01_AC_Analysis_autom.sql'
 task_2 = ExasolOperator(
@@ -153,7 +180,7 @@ sendEmail = EmailOperator(
     
 
 # Establish Workflow
-[task_1a, task_1b] >> task_2 >> task_3 >> task_4 >> sendEmail 
+check_external_dag_completion >> [task_1a, task_1b] >> [task_1a, task_1b] >> task_2 >> task_3 >> task_4 >> sendEmail 
 
 
 
