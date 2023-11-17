@@ -45,7 +45,8 @@ __ML Model creation:__ an ML model could be created to predict article engagemen
 
 Creating a model can help us determine those features which likely create the most value in terms of engagement. We can then adjust our optimization efforts accordingly and avoid spending time on features that provide little to no value to our users.
 
-__DAG Optimization:__ it is always irritating when you look at your Tableau Dashboard, see some strange data behavior, and then go on a time-consuming hunt for the cause, only to find that something went wrong in your data pipeline or upstream. Whenever a DAG is run frequently, it can be worthwhile to:
+__DAG Optimization:__  
+it is always irritating when you look at your Tableau Dashboard, see some strange data behavior, and then go on a time-consuming hunt for the cause, only to find that something went wrong in your data pipeline or upstream. Whenever a DAG is run frequently, it can be worthwhile to:
   - integrate some basic QA checks  which help indicate to what extent the processes have run successfully (for example: if the length of a table we create as part of the DAG does not exceed a predetermined minimum, raise an error)
   - integrate external event sensors to detect successful completion of upstream DAGs
   - discuss with Data Engineering Dept. or owners of upstream DAGs possible / emerging data quality issues
